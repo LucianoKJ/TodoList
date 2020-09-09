@@ -16,38 +16,33 @@ const initialState = [
 ]
 
 const todos = (state = initialState, action) => {
-  let newTodos = []
-  let todoItemIndex = -1
-  // console.log('reducer')
+  const newTodos = JSON.parse(JSON.stringify(state))
+  let todoItemIndex
 
   switch (action.type) {
     case ADD_TODO:
-      return [action.payload, ...state]
+      return [action.payload, ...newTodos]
 
     case DELETE_TODO:
-      return state.filter((v) => v.id !== action.payload)
+      return newTodos.filter((v) => v.id !== action.payload.id)
 
     case TOGGLE_TODO:
-      newTodos = [...state]
-      todoItemIndex = state.findIndex((v) => v.id === action.payload)
+      todoItemIndex = state.findIndex((v) => v.id === action.payload.id)
       if (todoItemIndex !== -1) {
         newTodos[todoItemIndex].edited = !newTodos[todoItemIndex].edited
       }
       return newTodos
 
     case CHANGE_TEXT:
-      newTodos = [...state]
       todoItemIndex = state.findIndex((v) => v.id === action.payload.id)
-
       if (todoItemIndex !== -1) {
         newTodos[todoItemIndex].text = action.payload.text
       }
       return newTodos
 
     case FINISH_TODO:
-      newTodos = [...state]
       todoItemIndex = state.findIndex((v) => v.id === action.payload.id)
-
+      console.log(todoItemIndex)
       if (todoItemIndex !== -1) {
         newTodos[todoItemIndex].completed = !newTodos[todoItemIndex].completed
       }

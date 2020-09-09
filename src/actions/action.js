@@ -13,15 +13,15 @@ export const addTodo = (newTodoItem) => ({
 })
 
 //刪除
-export const deleteTodo = (deleteId) => ({
+export const deleteTodo = (id) => ({
   type: DELETE_TODO,
-  payload: deleteId,
+  payload: { id },
 })
 
 //修改
 export const toggleTodo = (id) => ({
   type: TOGGLE_TODO,
-  payload: id,
+  payload: { id },
 })
 
 //修改內容
@@ -33,5 +33,5 @@ export const changeText = (id, text) => ({
 //完成
 export const finishTodo = (id) => ({
   type: FINISH_TODO,
-  payload: id,
+  payload: { id },
 })

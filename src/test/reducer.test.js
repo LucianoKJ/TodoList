@@ -1,51 +1,85 @@
-import configureMockStore from 'redux-mock-store'
-import thunk from 'redux-thunk'
-import fetchMock from 'fetch-mock'
+import reducer from '../reducers/todos'
 import * as types from '../actions/actionType'
-import reducer from '../reducers'
-const middlewares = [thunk]
-const mockStore = configureMockStore(middlewares)
 
 describe('todos reducer', () => {
-  // 每一次測試後清除 fetchMock 的紀錄
-  afterEach(() => {
-    fetchMock.restore()
+  const initialTodoData = [
+    {
+      id: 1591256594282,
+      text: '每週三交進度',
+      completed: false,
+      edited: false,
+    },
+  ]
+
+  test('test default', () => {
+    // 初始資料
+    expect(reducer(undefined, {})).toEqual(initialTodoData)
   })
 
-  test('test reducer', () => {
-    // 確認初始資料
-    const initialData = {
-      todos: [
-        {
-          id: 1591256594282,
-          text: '每週三交進度',
-          completed: false,
-          edited: false,
-        },
-      ],
+  test('test ADD_TODO', () => {
+    const prevState = JSON.parse(JSON.stringify(initialTodoData))
+    const action = {
+      type: types.ADD_TODO,
+      payload: {
+        id: 123,
+        text: '早睡早起',
+        completed: false,
+        edited: false,
+      },
     }
-    expect(reducer(undefined, {})).toEqual(initialData)
+    const expectOutcome = [action.payload, ...prevState]
+    expect(reducer(prevState, action)).toEqual(expectOutcome)
+  })
 
-    // // 傳入初始值及 addTodo ：
-    // expect(reducer(initialData, actions.addCounter())).toEqual({
-    //   count: 1,
-    //   request: false,
-    // })
+  test('test DELETE_TODO', () => {
+    const prevState = JSON.parse(JSON.stringify(initialTodoData))
+    const action = {
+      type: types.DELETE_TODO,
+      payload: {
+        id: initialTodoData[0].id,
+      },
+    }
+    const expectOutcome = []
+    expect(reducer(prevState, action)).toEqual(expectOutcome)
+  })
 
-    // // 傳入初始值及 fetchCountRequest ：
-    // // 確認回傳的內容 request 是否變成 true
-    // expect(reducer(initialData, actions.fetchCountRequest())).toEqual({
-    //   count: 0,
-    //   request: true,
-    // })
+  test('test TOGGLE_TODO', () => {
+    const prevState = JSON.parse(JSON.stringify(initialTodoData))
+    const action = {
+      type: types.TOGGLE_TODO,
+      payload: {
+        id: prevState[0].id,
+      },
+    }
+    const expectOutcome = JSON.parse(JSON.stringify(prevState))
+    expectOutcome[0].edited = !expectOutcome[0].edited
+    expect(reducer(prevState, action)).toEqual(expectOutcome)
+  })
 
-    // // 傳入初始值及 fetchCountSuccess ：
-    // // 確認回傳的內容 count 是否如 response 的 count 相同
-    // expect(
-    //   reducer(initialData, actions.fetchCountSuccess({ count: 2 }))
-    // ).toEqual({
-    //   count: 2,
-    //   request: false,
-    // })
+  test('test CHANGE_TEXT', () => {
+    const prevState = JSON.parse(JSON.stringify(initialTodoData))
+    const action = {
+      type: types.CHANGE_TEXT,
+      payload: {
+        id: prevState[0].id,
+        text: 'abcdefg',
+      },
+    }
+    const expectOutcome = JSON.parse(JSON.stringify(prevState))
+    expectOutcome[0].text = action.payload.text
+    expect(reducer(prevState, action)).toEqual(expectOutcome)
+  })
+
+  test('test FINISH_TODO', () => {
+    const prevState = JSON.parse(JSON.stringify(initialTodoData))
+    const action = {
+      type: types.FINISH_TODO,
+      payload: {
+        id: prevState[0].id,
+      },
+    }
+    const expectOutcome = JSON.parse(JSON.stringify(prevState))
+    expectOutcome[0].completed = !expectOutcome[0].completed
+    expect(reducer(prevState, action)).toEqual(expectOutcome)
   })
 })

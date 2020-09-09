@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { connect } from 'react-redux'
 import { deleteTodo, toggleTodo, finishTodo } from '../../actions/'
 
 function TodoItem(props) {
   // console.log(props)
   // 先解構賦值，直接套用由props得到的變數值
-  const { value, handleCompleted, deleteTodo, toggleTodo, finishTodo } = props
+  const { value, deleteTodo, toggleTodo, finishTodo } = props
 
   const date = new Date(value.id)
 
@@ -21,14 +21,12 @@ function TodoItem(props) {
     toggleTodo(id)
   }
   const handleCompletedToggle = (id) => {
-    // console.log({ value })
     finishTodo(id)
-    // console.log({ value })
   }
 
-  // useEffect(() => {
-  //   console.log('render')
-  // })
+  React.useEffect(() => {
+    console.log(value)
+  })
   return (
     <>
       <li className={cssClasses}>
@@ -68,15 +66,10 @@ function TodoItem(props) {
     </>
   )
 }
-const mapStateToProps = (state, ownprops) => {
-  // console.log(state)
-  return null
-}
-
 const mapDispatchToProps = {
   deleteTodo,
   toggleTodo,
   finishTodo,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TodoItem)
+export default connect(null, mapDispatchToProps)(TodoItem)

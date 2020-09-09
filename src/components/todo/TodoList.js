@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import TodoItem from './TodoItem'
 import TodoItemEditForm from './TodoItemEditForm'
 import { connect } from 'react-redux'
-import { addTodo } from '../../actions/'
 
 function TodoList(props) {
-  //console.log(props)
   const { todos, handleEditedSave } = props
 
   return (
@@ -22,14 +20,7 @@ function TodoList(props) {
                 />
               )
             }
-
-            return (
-              <TodoItem
-                key={value.id}
-                value={value}
-                completed={value.completed}
-              />
-            )
+            return <TodoItem key={value.id} value={value} />
           })}
         </ul>
       </div>
